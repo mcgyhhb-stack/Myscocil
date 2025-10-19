@@ -3,527 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محمد أحمد | مطور ويب</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>اجتماعي - شبكتك الاجتماعية</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        .splash-container { animation: fadeIn 1s ease-in; }
+        .logo { font-size: 4rem; margin-bottom: 2rem; animation: bounce 2s infinite; }
+        .app-name { font-size: 3rem; font-weight: bold; margin-bottom: 1rem; }
+        .tagline { font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem; }
+        .loading-bar { width: 200px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden; margin: 2rem auto; }
+        .loading-progress { height: 100%; background: white; animation: loading 5s linear forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
+        @keyframes loading { 0% { width: 0%; } 100% { width: 100%; } }
+    </style>
 </head>
 <body>
-    <!-- شريط التنقل -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="#home">محمد</a>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">الرئيسية</a></li>
-                <li><a href="#about" class="nav-link">عنّي</a></li>
-                <li><a href="#skills" class="nav-link">المهارات</a></li>
-                <li><a href="#projects" class="nav-link">المشاريع</a></li>
-                <li><a href="#contact" class="nav-link">اتصل بي</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
-
-    <!-- القسم الرئيسي -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1>مرحباً، أنا <span class="highlight">محمد</span></h1>
-                <h2>مطور ويب و مصمم واجهات</h2>
-                <p>أبتكر حلولاً رقمية مميزة تجمع بين الجمال والأداء</p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">مشاريعي</a>
-                    <a href="#contact" class="btn btn-secondary">تواصل معي</a>
-                </div>
-            </div>
-            <div class="hero-image">
-                <div class="profile-card">
-                    <div class="avatar">👨‍💻</div>
-                    <h3>محمد أحمد</h3>
-                    <p>مطور ويب</p>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <span></span>
-        </div>
-    </section>
-
-    <!-- قسم عني -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">عنّي</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <h3>قصة شغفي بالبرمجة</h3>
-                    <p>
-                        أنا مطور ويب شغوف بتحويل الأفكار إلى واقع رقمي. 
-                        أمتلك خبرة 3 سنوات في تطوير مواقع الويب وتطبيقات الويب الحديثة.
-                    </p>
-                    <p>
-                        أؤمن بأن التكنولوجيا يجب أن تكون جميلة وسهلة الاستخدام، 
-                        ولهذا أركز على تجربة المستخدم وأداء التطبيقات.
-                    </p>
-                    <div class="about-stats">
-                        <div class="stat">
-                            <span class="number">50+</span>
-                            <span class="label">مشروع مكتمل</span>
-                        </div>
-                        <div class="stat">
-                            <span class="number">3+</span>
-                            <span class="label">سنوات خبرة</span>
-                        </div>
-                        <div class="stat">
-                            <span class="number">30+</span>
-                            <span class="label">عميل سعيد</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-image">
-                    <div class="floating-elements">
-                        <div class="element html">HTML</div>
-                        <div class="element css">CSS</div>
-                        <div class="element js">JavaScript</div>
-                        <div class="element react">React</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم المهارات -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">مهاراتي</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>تطوير الواجهات</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <span class="skill-name">HTML5</span>
-                            <div class="skill-bar">
-                                <div class="skill-level" data-level="95"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">CSS3</span>
-                            <div class="skill-bar">
-                                <div class="skill-level" data-level="90"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">JavaScript</span>
-                            <div class="skill-bar">
-                                <div class="skill-level" data-level="85"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">React</span>
-                            <div class="skill-bar">
-                                <div class="skill-level" data-level="80"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>التصميم</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <span class="skill-name">UI/UX Design</span>
-                            <div class="skill-bar">
-                                <div class="skill-level" data-level="85"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Figma</span>
-                            <div class="skill-bar">
-                                <div class="skill-level" data-level="80"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Adobe XD</span>
-                            <div class="skill-bar">
-                                <div class="skill-level" data-level="75"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم المشاريع -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">مشاريعي</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="project-link">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="project-tech">
-                            <span>React</span>
-                            <span>Node.js</span>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>منصة تعليمية</h3>
-                        <p>منصة تعليمية متكاملة لدورات البرمجة</p>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="project-link">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="project-tech">
-                            <span>Vue.js</span>
-                            <span>Firebase</span>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>تطبيق مهام</h3>
-                        <p>تطبيق لإدارة المهام اليومية</p>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="project-link">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="project-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JS</span>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>موقع مطعم</h3>
-                        <p>موقع حجز طاولات للمطاعم</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم الاتصال -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">لنتواصل</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <h4>البريد الإلكتروني</h4>
-                            <p>mohamed@example.com</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <div>
-                            <h4>الهاتف</h4>
-                            <p>+966 55 123 4567</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <h4>الموقع</h4>
-                            <p>الرياض، السعودية</p>
-                        </div>
-                    </div>
-                </div>
-                <form class="contact-form">
-                    <div class="form-group">
-                        <input type="text" placeholder="اسمك" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" placeholder="بريدك الإلكتروني" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea placeholder="رسالتك" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- الفوتر -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>محمد أحمد</h3>
-                    <p>مطور ويب شغوف بخلق تجارب رقمية استثنائية</p>
-                </div>
-                <div class="footer-section">
-                    <h4>روابط سريعة</h4>
-                    <a href="#home">الرئيسية</a>
-                    <a href="#about">عنّي</a>
-                    <a href="#projects">المشاريع</a>
-                    <a href="#contact">اتصل بي</a>
-                </div>
-                <div class="footer-section">
-                    <h4>تابعني</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 محمد أحمد. جميع الحقوق محفوظة.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/script.js"></script>
-</body>
-</html>
-
-                <h3>التقنيات الأساسية</h3>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span class="skill-name">HTML5 & CSS3</span>
-                        <span class="skill-percentage">95%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 95%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span class="skill-name">JavaScript</span>
-                        <span class="skill-percentage">90%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 90%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span class="skill-name">React</span>
-                        <span class="skill-percentage">85%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 85%"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="skill-category">
-                <h3>أدوات التطوير</h3>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span class="skill-name">Git & GitHub</span>
-                        <span class="skill-percentage">88%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 88%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span class="skill-name">Responsive Design</span>
-                        <span class="skill-percentage">92%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 92%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span class="skill-name">UI/UX Design</span>
-                        <span class="skill-percentage">80%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 80%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="splash-container">
+        <div class="logo">🌐</div>
+        <h1 class="app-name">اجتماعي</h1>
+        <p class="tagline">شبكتك الاجتماعية العربية</p>
+        <div class="loading-bar"><div class="loading-progress"></div></div>
+        <p>جاري التحميل...</p>
     </div>
-</section>
-
-<!-- قسم المشاريع -->
-<section id="projects" class="projects">
-    <div class="container">
-        <h2 class="section-title">مشاريعي</h2>
-        <div class="projects-grid">
-            <div class="project-card">
-                <div class="project-image">
-                    <i class="fas fa-shopping-cart"></i>
-                </div>
-                <div class="project-content">
-                    <h3>متجر إلكتروني</h3>
-                    <p>متجر إلكتروني متكامل مع نظام دفع إلكتروني وتصميم متجاوب يعمل على جميع الأجهزة</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">HTML5</span>
-                        <span class="tech-tag">CSS3</span>
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">React</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" class="project-link">عرض المشروع</a>
-                        <a href="#" class="project-link">الكود المصدري</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="project-card">
-                <div class="project-image">
-                    <i class="fas fa-blog"></i>
-                </div>
-                <div class="project-content">
-                    <h3>منصة تدوين</h3>
-                    <p>منصة تدوين حديثة تسمح للمستخدمين بإنشاء ومشاركة المحتوى بسهولة مع نظام تعليقات متكامل</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">HTML5</span>
-                        <span class="tech-tag">CSS3</span>
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">Node.js</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" class="project-link">عرض المشروع</a>
-                        <a href="#" class="project-link">الكود المصدري</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="project-card">
-                <div class="project-image">
-                    <i class="fas fa-tasks"></i>
-                </div>
-                <div class="project-content">
-                    <h3>تطبيق المهام</h3>
-                    <p>تطبيق لإدارة المهام اليومية مع ميزات متقدمة مثل التذكيرات وتصنيف المهام حسب الأولوية</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">HTML5</span>
-                        <span class="tech-tag">CSS3</span>
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">Vue.js</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" class="project-link">عرض المشروع</a>
-                        <a href="#" class="project-link">الكود المصدري</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- قسم الاتصال -->
-<section id="contact" class="contact">
-    <div class="container">
-        <h2 class="section-title">اتصل بي</h2>
-        <div class="contact-content">
-            <div class="contact-info">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <div class="contact-text">
-                        <h4>الهاتف</h4>
-                        <p>+965 1234 5678</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="contact-text">
-                        <h4>البريد الإلكتروني</h4>
-                        <p>mohamed@example.com</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <div class="contact-text">
-                        <h4>العنوان</h4>
-                        <p>الكويت</p>
-                    </div>
-                </div>
-            </div>
-            <div class="contact-form">
-                <form id="contactForm">
-                    <div class="form-group">
-                        <label for="name">الاسم الكامل</label>
-                        <input type="text" id="name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">البريد الإلكتروني</label>
-                        <input type="email" id="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">الموضوع</label>
-                        <input type="text" id="subject" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">الرسالة</label>
-                        <textarea id="message" class="form-control" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- الفوتر -->
-<footer class="footer">
-    <div class="footer-content">
-        <div class="social-links">
-            <a href="#" class="social-link">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" class="social-link">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a href="#" class="social-link">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="#" class="social-link">
-                <i class="fab fa-instagram"></i>
-            </a>
-        </div>
-        <p class="copyright">© 2024 محمد أحمد. جميع الحقوق محفوظة.</p>
-    </div>
-</footer>
-
-<script src="js/script.js"></script>
+    <script>
+        setTimeout(() => { window.location.href = 'login.html'; }, 5000);
+    </script>
 </body>
 </html>
