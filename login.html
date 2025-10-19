@@ -1,46 +1,169 @@
-cat > ~/social-network/test-login.html << 'EOF'
+cat > ~/social-network/home.html << 'EOF'
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>اختبار تسجيل الدخول</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/database.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية - اجتماعي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 1rem 0;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            margin: 2rem auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 800px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .logout-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+        
+        .user-info {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem auto;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .debug-info {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem auto;
+            max-width: 500px;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: left;
+            direction: ltr;
+        }
+    </style>
 </head>
 <body>
-    <h1>🧪 اختبار تسجيل الدخول</h1>
-    
-    <h3>جرب هذه الحالات:</h3>
-    <button onclick="testCorrectLogin()">تسجيل دخول صحيح</button>
-    <button onclick="testWrongEmail()">بريد إلكتروني خاطئ</button>
-    <button onclick="testWrongPassword()">كلمة مرور خاطئة</button>
-    
-    <div id="result" style="margin: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>🌐 اجتماعي</h1>
+            <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+        </div>
+    </nav>
 
+    <div class="welcome-message">
+        <h2 style="color: #2d3748; margin-bottom: 1rem;">مرحباً بك في اجتماعي! 🎉</h2>
+        <div class="user-info">
+            <p id="userWelcome" style="font-size: 1.2rem; color: #4a5568;">جاري تحميل البيانات...</p>
+        </div>
+        <p style="color: #718096; margin: 1rem 0;">هذه الصفحة الرئيسية للشبكة الاجتماعية</p>
+        <p style="color: #38a169; font-weight: 600;">🚀 تم ربط الموقع بقاعدة بيانات حقيقية!</p>
+        
+        <div class="debug-info" id="debugInfo">
+            🔍 جاري التحقق من الجلسة...
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        async function testCorrectLogin() {
-            const result = await loginUser('ahmed@example.com', '123456');
-            document.getElementById('result').innerHTML = 
-                result.success ? 
-                '✅ ' + result.user.first_name + ' - تسجيل الدخول ناجح!' :
-                '❌ ' + result.error;
+        // إعداد Supabase مباشرة في هذه الصفحة للتأكد من العمل
+        const supabaseUrl = 'https://nqgdqyndtusbovuwhygb.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xZ2RxeW5kdHVzYm92dXdoeWdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4MTIyODQsImV4cCI6MjA3NjM4ODI4NH0.Sj6GnBn_OzcJ5X2MO2g4JmUm50kI1jKbFkDykmi5kCg';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // دالة التحقق من الجلسة
+        function checkSession() {
+            console.log('🔍 فحص الجلسة...');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const user = localStorage.getItem('currentUser');
+            
+            const sessionData = { 
+                isLoggedIn: isLoggedIn === 'true', 
+                user: user ? JSON.parse(user) : null 
+            };
+            
+            console.log('📊 بيانات الجلسة:', sessionData);
+            return sessionData;
         }
-
-        async function testWrongEmail() {
-            const result = await loginUser('nonexistent@example.com', '123456');
-            document.getElementById('result').innerHTML = 
-                result.success ? 
-                '✅ تسجيل الدخول ناجح!' :
-                '❌ ' + result.error;
+        
+        // دالة تسجيل الخروج
+        function logout() {
+            console.log('🚪 جاري تسجيل الخروج...');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
         }
-
-        async function testWrongPassword() {
-            const result = await loginUser('ahmed@example.com', 'wrongpassword');
-            document.getElementById('result').innerHTML = 
-                result.success ? 
-                '✅ تسجيل الدخول ناجح!' :
-                '❌ ' + result.error;
-        }
+        
+        // التحقق من الجلسة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            const debugInfo = document.getElementById('debugInfo');
+            const userWelcome = document.getElementById('userWelcome');
+            
+            debugInfo.innerHTML = '🔍 جاري فحص حالة تسجيل الدخول...';
+            
+            const session = checkSession();
+            
+            // عرض معلومات التصحيح
+            debugInfo.innerHTML = `
+                📊 حالة الجلسة:<br>
+                - تسجيل الدخول: ${session.isLoggedIn ? '✅' : '❌'}<br>
+                - بيانات المستخدم: ${session.user ? '✅' : '❌'}<br>
+                - التخزين المحلي: ${typeof localStorage !== 'undefined' ? '✅' : '❌'}
+            `;
+            
+            if (!session.isLoggedIn || !session.user) {
+                userWelcome.innerHTML = '❌ لم يتم تسجيل الدخول';
+                debugInfo.innerHTML += '<br><span style="color: red;">⚠️ سيتم توجيهك إلى صفحة تسجيل الدخول...</span>';
+                
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return;
+            }
+            
+            // عرض ترحيب بالمستخدم
+            userWelcome.innerHTML = 
+                `مرحباً <strong>${session.user.first_name} ${session.user.last_name}</strong>!<br>
+                 <small style="color: #718096;">البريد: ${session.user.email}</small>`;
+            
+            debugInfo.innerHTML += '<br><span style="color: green;">✅ تم تسجيل الدخول بنجاح!</span>';
+        });
     </script>
 </body>
 </html>
