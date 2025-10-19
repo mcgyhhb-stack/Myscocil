@@ -2,7 +2,31 @@ cat > ~/social-network/js/database.js << 'EOF'
 // إعداد Supabase - بالبيانات الحقيقية
 const supabaseUrl = 'https://nqgdqyndtusbovuwhygb.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xZ2RxeW5kdHVzYm92dXdoeWdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4MTIyODQsImV4cCI6MjA3NjM4ODI4NH0.Sj6GnBn_OzcJ5X2MO2g4JmUm50kI1jKbFkDykmi5kCg';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// التهيئة الصحيحة - استخدام window.supabase
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// دالة الحصول على جميع المستخدمين
+async function getAllUsers() {
+    try {
+        console.log('جاري جلب جميع المستخدمين...');
+        
+        const { data, error } = await supabase
+            .from('users')
+            .select('*');
+        
+        if (error) {
+            console.error('خطأ في جلب المستخدمين:', error);
+            throw error;
+        }
+        
+        console.log('تم جلب المستخدمين بنجاح:', data);
+        return { success: true, users: data };
+    } catch (error) {
+        console.error('خطأ:', error);
+        return { success: false, error: error.message };
+    }
+}
 
 // دالة تسجيل مستخدم جديد
 async function registerUser(userData) {
@@ -20,7 +44,7 @@ async function registerUser(userData) {
         }
         
         console.log('تم التسجيل بنجاح:', data);
-        return { success: true, data };
+        return { success: true, data: data[0] };
     } catch (error) {
         console.error('خطأ:', error);
         return { success: false, error: error.message };
@@ -90,18 +114,6 @@ function logout() {
     localStorage.removeItem('isLoggedIn');
     window.location.href = 'login.html';
 }
-
-// دالة الحصول على جميع المستخدمين (للتطوير)
-async function getAllUsers() {
-    try {
-        const { data, error } = await supabase
-            .from('users')
-            .select('*');
-        
-        if (error) throw error;
-        return { success: true, users: data };
-    } catch (error) {
-        return { success: false, error: error.message };
-    }
+EOF    }
 }
 EOF
