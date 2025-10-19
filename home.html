@@ -1,0 +1,72 @@
+cat > ~/social-network/home.html << 'EOF'
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية - اجتماعي</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .navbar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 1rem 0;
+            color: white;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .welcome-message {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            margin: 1rem;
+            border-radius: 15px;
+        }
+        .logout-btn {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>🌐 اجتماعي</h1>
+            <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+        </div>
+    </nav>
+
+    <div class="welcome-message">
+        <h2>مرحباً بك في اجتماعي!</h2>
+        <p id="userWelcome">...</p>
+        <p>هذه الصفحة الرئيسية للشبكة الاجتماعية</p>
+    </div>
+
+    <script src="js/database.js"></script>
+    <script>
+        // التحقق من الجلسة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            const session = checkSession();
+            
+            if (!session.isLoggedIn) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // عرض ترحيب بالمستخدم
+            document.getElementById('userWelcome').textContent = 
+                `مرحباً ${session.user.first_name} ${session.user.last_name}!`;
+        });
+    </script>
+</body>
+</html>
+EOF
