@@ -1,83 +1,31 @@
-// تفعيل القائمة المتنقلة
+// JavaScript for interactive features
+
+// تنشيط شريط التنقل عند التمرير
+window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+        navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+    } else {
+        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+    }
+});
+
+// قائمة الهاتف المحمول
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
-hamburger.addEventListener('click', () => {
+hamburger.addEventListener('click', function() {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
 });
 
 // إغلاق القائمة عند النقر على رابط
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-    });
-});
-
-// تفعيل أشرطة المهارات عند التمرير
-function animateSkills() {
-    const skillLevels = document.querySelectorAll('.skill-level');
-    
-    skillLevels.forEach(skill => {
-        const level = skill.getAttribute('data-level');
-        skill.style.width = level + '%';
-    });
-}
-
-// تفعيل العدادات عند التمرير
-function animateCounters() {
-    const counters = document.querySelectorAll('.number');
-    
-    counters.forEach(counter => {
-        const target = +counter.innerText.replace('+', '');
-        const count = +counter.innerText.replace('+', '');
-        const increment = target / 100;
-        
-        if (count < target) {
-            counter.innerText = Math.ceil(count + increment) + '+';
-            setTimeout(animateCounters, 20);
-        }
-    });
-}
-
-// التحقق من ظهور العنصر في الشاشة
-function isInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    return (
-        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.bottom >= 0
-    );
-}
-
-// تفعيل الأنيميشن عند التمرير
-let skillsAnimated = false;
-let countersAnimated = false;
-
-window.addEventListener('scroll', () => {
-    const skillsSection = document.querySelector('.skills');
-    const aboutSection = document.querySelector('.about');
-    
-    // أنيميشن المهارات
-    if (isInViewport(skillsSection) && !skillsAnimated) {
-        animateSkills();
-        skillsAnimated = true;
-    }
-    
-    // أنيميشن العدادات
-    if (isInViewport(aboutSection) && !countersAnimated) {
-        animateCounters();
-        countersAnimated = true;
-    }
-    
-    // تغيير لون الشريط عند التمرير
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 100) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-    }
-});
+document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', function() {
+    hamburger.classList.remove('active');
+    navMenu.classList.remove('active');
+}));
 
 // تأثير التمرير السلس للروابط
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -93,20 +41,109 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// تفعيل نموذج الاتصال
-const contactForm = document.querySelector('.contact-form');
+// تحريك أشرطة المهارات عند التمرير إليها
+const skillBars = document.querySelectorAll('.skill-progress');
+
+function animateSkillBars() {
+    skillBars.forEach(bar => {
+        const width = bar.style.width;
+        bar.style.width = '0';
+        setTimeout(() => {
+            bar.style.width = width;
+        }, 500);
+    });
+}
+
+// تفعيل الرسوم المتحركة عند التمرير
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            if (entry.target.classList.contains('skills')) {
+                animateSkillBars();
+            }
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, {
+    threshold: 0.1
+});
+
+// مراقبة الأقسام للرسوم المتحركة
+document.querySelectorAll('section').forEach(section => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(50px)';
+    section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(section);
+});
+
+// نموذج الاتصال
+const contactForm = document.getElementById('contactForm');
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        alert('شكراً لك! سيتم الرد على رسالتك قريباً.');
+        
+        // محاكاة إرسال النموذج
+        const formData = new FormData(this);
+        const name = formData.get('name') || document.getElementById('name').value;
+        
+        alert(`شكراً لك ${name}! تم استلام رسالتك وسأرد عليك قريباً.`);
         this.reset();
     });
 }
 
-// تهيئة الموقع عند التحميل
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('الموقع الشخصي جاهز! 🚀');
+// تأثير الكتابة للعنوان
+const heroTitle = document.querySelector('.hero-text h1');
+if (heroTitle) {
+    const text = heroTitle.textContent;
+    heroTitle.textContent = '';
+    let i = 0;
     
-    // تفعيل الأنيميشن الأولية
-    animateSkills();
+    function typeWriter() {
+        if (i < text.length) {
+            heroTitle.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 100);
+        }
+    }
+    
+    // بدء تأثير الكتابة بعد تحميل الصفحة
+    window.addEventListener('load', typeWriter);
+}
+
+// إضافة تأثير القلب عند النقر
+document.addEventListener('click', function(e) {
+    const heart = document.createElement('div');
+    heart.innerHTML = '❤️';
+    heart.style.position = 'fixed';
+    heart.style.left = e.clientX + 'px';
+    heart.style.top = e.clientY + 'px';
+    heart.style.pointerEvents = 'none';
+    heart.style.fontSize = '20px';
+    heart.style.zIndex = '9999';
+    heart.style.animation = 'floatUp 1s ease-out forwards';
+    
+    document.body.appendChild(heart);
+    
+    setTimeout(() => {
+        heart.remove();
+    }, 1000);
 });
+
+// إضافة أنيميشن للقلوب
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes floatUp {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-100px) scale(0.5);
+        }
+    }
+`;
+document.head.appendChild(style);
+
+console.log('🚀 موقع محمد أحمد جاهز ويعمل!');
