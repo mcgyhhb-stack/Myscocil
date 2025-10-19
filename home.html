@@ -6,6 +6,8 @@ cat > ~/social-network/home.html << 'EOF'
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الصفحة الرئيسية - اجتماعي</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/database.js"></script>
     <style>
         .navbar {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -23,17 +25,22 @@ cat > ~/social-network/home.html << 'EOF'
         .welcome-message {
             text-align: center;
             padding: 2rem;
-            background: var(--card-bg);
+            background: #f8fafc;
             margin: 1rem;
             border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         .logout-btn {
-            background: var(--error-color);
+            background: #f44336;
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 10px;
             cursor: pointer;
+            font-weight: 600;
+        }
+        .logout-btn:hover {
+            background: #d32f2f;
         }
     </style>
 </head>
@@ -46,18 +53,19 @@ cat > ~/social-network/home.html << 'EOF'
     </nav>
 
     <div class="welcome-message">
-        <h2>مرحباً بك في اجتماعي!</h2>
+        <h2>مرحباً بك في اجتماعي! 🎉</h2>
         <p id="userWelcome">...</p>
         <p>هذه الصفحة الرئيسية للشبكة الاجتماعية</p>
+        <p>🚀 تم ربط الموقع بقاعدة بيانات حقيقية!</p>
     </div>
 
-    <script src="js/database.js"></script>
     <script>
         // التحقق من الجلسة عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
             const session = checkSession();
             
             if (!session.isLoggedIn) {
+                alert('يجب تسجيل الدخول أولاً');
                 window.location.href = 'login.html';
                 return;
             }
