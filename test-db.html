@@ -1,0 +1,52 @@
+cat > ~/social-network/test-db.html << 'EOF'
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>اختبار قاعدة البيانات</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/database.js"></script>
+</head>
+<body style="padding: 20px; font-family: Arial;">
+    <h1>🧪 اختبار قاعدة البيانات</h1>
+    <button onclick="testConnection()">اختبار الاتصال بقاعدة البيانات</button>
+    <button onclick="testRegister()">اختبار تسجيل مستخدم جديد</button>
+    <button onclick="viewUsers()">عرض جميع المستخدمين</button>
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        async function testConnection() {
+            const result = await getAllUsers();
+            document.getElementById('result').innerHTML = 
+                result.success ? 
+                '✅ الاتصال ناجح!<br>عدد المستخدمين: ' + result.users.length :
+                '❌ خطأ: ' + result.error;
+        }
+
+        async function testRegister() {
+            const testUser = {
+                first_name: 'اختبار',
+                last_name: 'المستخدم',
+                email: 'test@example.com',
+                username: 'testuser',
+                password: '123456'
+            };
+            
+            const result = await registerUser(testUser);
+            document.getElementById('result').innerHTML = 
+                result.success ? 
+                '✅ التسجيل ناجح!<br>بيانات المستخدم: ' + JSON.stringify(result.data) :
+                '❌ خطأ في التسجيل: ' + result.error;
+        }
+
+        async function viewUsers() {
+            const result = await getAllUsers();
+            document.getElementById('result').innerHTML = 
+                result.success ? 
+                '👥 جميع المستخدمين:<br>' + JSON.stringify(result.users, null, 2) :
+                '❌ خطأ: ' + result.error;
+        }
+    </script>
+</body>
+</html>
+EOF
