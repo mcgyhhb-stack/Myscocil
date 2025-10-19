@@ -1,47 +1,47 @@
+cat > ~/social-network/test-login.html << 'EOF'
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - اجتماعي</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>اختبار تسجيل الدخول</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/database.js"></script>
 </head>
-<body class="auth-page">
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <div class="logo">🌐</div>
-                <h1>مرحباً بعودتك!</h1>
-                <p>سجل الدخول إلى حسابك</p>
-            </div>
+<body>
+    <h1>🧪 اختبار تسجيل الدخول</h1>
+    
+    <h3>جرب هذه الحالات:</h3>
+    <button onclick="testCorrectLogin()">تسجيل دخول صحيح</button>
+    <button onclick="testWrongEmail()">بريد إلكتروني خاطئ</button>
+    <button onclick="testWrongPassword()">كلمة مرور خاطئة</button>
+    
+    <div id="result" style="margin: 20px; padding: 10px; border: 1px solid #ccc;"></div>
 
-            <form class="auth-form" id="loginForm">
-                <div class="form-group">
-                    <label for="email">البريد الإلكتروني</label>
-                    <input type="email" id="email" required placeholder="example@email.com">
-                </div>
+    <script>
+        async function testCorrectLogin() {
+            const result = await loginUser('ahmed@example.com', '123456');
+            document.getElementById('result').innerHTML = 
+                result.success ? 
+                '✅ ' + result.user.first_name + ' - تسجيل الدخول ناجح!' :
+                '❌ ' + result.error;
+        }
 
-                <div class="form-group">
-                    <label for="password">كلمة المرور</label>
-                    <input type="password" id="password" required placeholder="أدخل كلمة المرور">
-                </div>
+        async function testWrongEmail() {
+            const result = await loginUser('nonexistent@example.com', '123456');
+            document.getElementById('result').innerHTML = 
+                result.success ? 
+                '✅ تسجيل الدخول ناجح!' :
+                '❌ ' + result.error;
+        }
 
-                <div class="form-options">
-                    <label class="checkbox">
-                        <input type="checkbox" id="remember">
-                        <span>تذكرني</span>
-                    </label>
-                    <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-full">تسجيل الدخول</button>
-            </form>
-
-            <div class="auth-footer">
-                <p>ليس لديك حساب؟ <a href="register.html">أنشئ حساب جديد</a></p>
-            </div>
-        </div>
-    </div>
-    <script src="js/auth.js"></script>
+        async function testWrongPassword() {
+            const result = await loginUser('ahmed@example.com', 'wrongpassword');
+            document.getElementById('result').innerHTML = 
+                result.success ? 
+                '✅ تسجيل الدخول ناجح!' :
+                '❌ ' + result.error;
+        }
+    </script>
 </body>
 </html>
+EOF
