@@ -1,17 +1,30 @@
+cat > ~/social-network/login.html << 'EOF'
 <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول</title>
+    <title>تسجيل الدخول - اجتماعي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f8fafc;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -19,139 +32,355 @@
             justify-content: center;
             align-items: center;
             direction: rtl;
+            padding: 20px;
         }
-        
-        .login-container {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             width: 100%;
-            max-width: 400px;
+            max-width: 440px;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .logo {
+
+        .glass-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 6s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(45deg) translateX(-100%); }
+            100% { transform: rotate(45deg) translateX(100%); }
+        }
+
+        .logo-section {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
-        
-        .logo h1 {
-            color: #333;
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: white;
+        }
+
+        .logo-section h1 {
+            color: var(--text);
             font-size: 28px;
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
-        
+
+        .logo-section p {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            position: relative;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 14px;
         }
-        
-        .form-group input {
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 18px;
+        }
+
+        .input-with-icon input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
+            padding: 16px 52px 16px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+            background: var(--secondary);
         }
-        
-        .form-group input:focus {
+
+        .input-with-icon input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
-        
+
         .login-btn {
             width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient);
             color: white;
             border: none;
-            padding: 14px;
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        
+
         .login-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
         }
-        
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .login-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
         .links {
-            text-align: center;
-            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
         }
-        
+
         .links a {
-            color: #667eea;
+            color: var(--primary);
             text-decoration: none;
-            margin: 0 10px;
             font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
-        
+
+        .links a:hover {
+            color: var(--primary-dark);
+        }
+
+        .demo-accounts {
+            background: var(--secondary);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .demo-accounts h3 {
+            color: var(--text);
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .demo-account {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .demo-account:last-child {
+            border-bottom: none;
+        }
+
+        .demo-account span {
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .demo-account .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .demo-account .copy-btn:hover {
+            background: var(--primary-dark);
+        }
+
         .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 20px;
             text-align: center;
             font-size: 14px;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
         }
-        
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
         }
-        
+
         .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
 
         .debug-info {
             background: #f1f5f9;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
             font-size: 12px;
-            text-align: left;
-            direction: ltr;
+            color: var(--text-light);
+            display: none;
+        }
+
+        .toggle-debug {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .toggle-debug button {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .glass-container {
+                padding: 32px 24px;
+                margin: 10px;
+            }
+            
+            .logo-section h1 {
+                font-size: 24px;
+            }
+            
+            .links {
+                flex-direction: column;
+                gap: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="logo">
-            <h1>مرحباً بعودتك! 👋</h1>
+    <div class="glass-container">
+        <div class="logo-section">
+            <div class="logo">
+                <i class="fas fa-users"></i>
+            </div>
+            <h1>مرحباً بعودتك</h1>
             <p>سجل الدخول إلى حسابك للمتابعة</p>
         </div>
         
         <form id="loginForm">
             <div class="form-group">
                 <label for="email">البريد الإلكتروني</label>
-                <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني" required value="ahmed@example.com">
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="ahmed@example.com" required>
+                </div>
             </div>
             
             <div class="form-group">
                 <label for="password">كلمة المرور</label>
-                <input type="password" id="password" placeholder="أدخل كلمة المرور" required value="123456">
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="كلمة المرور" required value="123456">
+                </div>
             </div>
             
-            <button type="submit" class="login-btn">تسجيل الدخول</button>
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span>تسجيل الدخول</span>
+            </button>
         </form>
-        
-        <div class="links">
-            <a href="#" onclick="testLocalStorage()">فحص التخزين المحلي</a>
+
+        <div class="demo-accounts">
+            <h3>👥 حسابات تجريبية:</h3>
+            <div class="demo-account">
+                <span>ahmed@example.com / 123456</span>
+                <button class="copy-btn" onclick="copyCredentials('ahmed@example.com', '123456')">نسخ</button>
+            </div>
+            <div class="demo-account">
+                <span>fatima@example.com / 123456</span>
+                <button class="copy-btn" onclick="copyCredentials('fatima@example.com', '123456')">نسخ</button>
+            </div>
         </div>
         
+        <div class="links">
+            <a href="#">نسيت كلمة المرور؟</a>
+            <a href="#">إنشاء حساب جديد</a>
+        </div>
+
         <div id="message"></div>
+        
+        <div class="toggle-debug">
+            <button onclick="toggleDebug()">🔧 عرض معلومات التصحيح</button>
+        </div>
+        
         <div id="debugInfo" class="debug-info"></div>
     </div>
 
@@ -162,24 +391,18 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xZ2RxeW5kdHVzYm92dXdoeWdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4MTIyODQsImV4cCI6MjA3NjM4ODI4NH0.Sj6GnBn_OzcJ5X2MO2g4JmUm50kI1jKbFkDykmi5kCg';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // دالة حفظ الجلسة - محدثة
+        // دالة حفظ الجلسة
         function setSession(user) {
             console.log('💾 حفظ الجلسة:', user);
             
-            // تأكد من أن user كائن صالح
             if (user && typeof user === 'object') {
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 localStorage.setItem('isLoggedIn', 'true');
                 
-                // تحقق من أن البيانات حفظت
                 const savedUser = localStorage.getItem('currentUser');
                 const savedLogin = localStorage.getItem('isLoggedIn');
                 
-                console.log('✅ تم الحفظ:', {
-                    savedUser: savedUser,
-                    savedLogin: savedLogin
-                });
-                
+                console.log('✅ تم الحفظ:', { savedUser, savedLogin });
                 return true;
             } else {
                 console.error('❌ بيانات المستخدم غير صالحة:', user);
@@ -187,7 +410,7 @@
             }
         }
 
-        // دالة تسجيل الدخول - محدثة
+        // دالة تسجيل الدخول
         async function loginUser(email, password) {
             try {
                 console.log('🔍 محاولة تسجيل الدخول:', email);
@@ -220,6 +443,43 @@
             }
         }
 
+        // نسخ بيانات الاعتماد
+        function copyCredentials(email, password) {
+            navigator.clipboard.writeText(`البريد: ${email}\nكلمة المرور: ${password}`)
+                .then(() => {
+                    showMessage('✅ تم نسخ بيانات التسجيل', 'success');
+                })
+                .catch(() => {
+                    showMessage('❌ فشل في النسخ', 'error');
+                });
+        }
+
+        // عرض الرسائل
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = 'message';
+            }, 3000);
+        }
+
+        // تبديل معلومات التصحيح
+        function toggleDebug() {
+            const debugDiv = document.getElementById('debugInfo');
+            debugDiv.style.display = debugDiv.style.display === 'block' ? 'none' : 'block';
+            
+            if (debugDiv.style.display === 'block') {
+                const currentUser = localStorage.getItem('currentUser');
+                const isLoggedIn = localStorage.getItem('isLoggedIn');
+                debugDiv.innerHTML = 
+                    '🔍 معلومات التصحيح:' +
+                    '<br>isLoggedIn: ' + (isLoggedIn || '❌ غير موجود') +
+                    '<br>currentUser: ' + (currentUser ? '✅ موجود' : '❌ غير موجود');
+            }
+        }
+
         // معالجة تسجيل الدخول
         document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -227,89 +487,45 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const messageDiv = document.getElementById('message');
-            const debugDiv = document.getElementById('debugInfo');
-            const loginBtn = document.querySelector('.login-btn');
+            const loginBtn = document.getElementById('loginBtn');
             
             // عرض حالة التحميل
-            loginBtn.innerHTML = 'جاري تسجيل الدخول...';
-            loginBtn.disabled = true;
-            messageDiv.innerHTML = '';
-            debugDiv.innerHTML = '🔍 جاري تسجيل الدخول...';
+            loginBtn.classList.add('loading');
+            loginBtn.querySelector('span').style.opacity = '0';
+            messageDiv.textContent = '';
             
             try {
                 const result = await loginUser(email, password);
                 
                 if (result.success) {
-                    messageDiv.className = 'message success';
-                    messageDiv.innerHTML = '✅ تم تسجيل الدخول بنجاح!';
-                    
-                    debugDiv.innerHTML = '✅ تسجيل الدخول ناجح! جاري حفظ الجلسة...';
+                    showMessage('✅ تم تسجيل الدخول بنجاح! جاري التوجيه...', 'success');
                     
                     // حفظ بيانات الجلسة
                     const sessionSaved = setSession(result.user);
                     
                     if (sessionSaved) {
-                        debugDiv.innerHTML += '<br>✅ تم حفظ الجلسة في localStorage!';
-                        
-                        // عرض بيانات التخزين للمراجعة
-                        setTimeout(() => {
-                            const savedUser = localStorage.getItem('currentUser');
-                            const savedLogin = localStorage.getItem('isLoggedIn');
-                            debugDiv.innerHTML += 
-                                '<br><br>📊 بيانات التخزين:' +
-                                '<br>isLoggedIn: ' + savedLogin +
-                                '<br>currentUser: ' + (savedUser ? '✅ موجود' : '❌ غير موجود');
-                        }, 500);
-                        
-                        // التوجيه إلى الصفحة الرئيسية بعد ثانيتين
+                        // التوجيه إلى الصفحة الرئيسية بعد ثانية
                         setTimeout(() => {
                             window.location.href = 'home.html';
-                        }, 2000);
+                        }, 1000);
                     } else {
-                        messageDiv.className = 'message error';
-                        messageDiv.innerHTML = '❌ فشل في حفظ الجلسة';
-                        debugDiv.innerHTML += '<br>❌ فشل في حفظ الجلسة في localStorage';
+                        showMessage('❌ فشل في حفظ الجلسة', 'error');
                     }
                 } else {
-                    messageDiv.className = 'message error';
-                    messageDiv.innerHTML = result.error;
-                    debugDiv.innerHTML = '❌ فشل تسجيل الدخول: ' + result.error;
+                    showMessage(result.error, 'error');
                 }
             } catch (error) {
-                messageDiv.className = 'message error';
-                messageDiv.innerHTML = '❌ حدث خطأ غير متوقع';
-                debugDiv.innerHTML = '❌ خطأ: ' + error.message;
+                showMessage('❌ حدث خطأ غير متوقع', 'error');
             } finally {
                 // إعادة زر التسجيل إلى حالته الأصلية
-                loginBtn.innerHTML = 'تسجيل الدخول';
-                loginBtn.disabled = false;
+                loginBtn.classList.remove('loading');
+                loginBtn.querySelector('span').style.opacity = '1';
             }
         });
 
-        // فحص التخزين المحلي
-        function testLocalStorage() {
-            const debugDiv = document.getElementById('debugInfo');
-            const currentUser = localStorage.getItem('currentUser');
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            
-            debugDiv.innerHTML = 
-                '🔍 فحص التخزين المحلي:' +
-                '<br>isLoggedIn: ' + (isLoggedIn || '❌ غير موجود') +
-                '<br>currentUser: ' + (currentUser ? '✅ موجود' : '❌ غير موجود');
-            
-            if (currentUser) {
-                try {
-                    const userData = JSON.parse(currentUser);
-                    debugDiv.innerHTML += '<br>📊 بيانات المستخدم: ' + JSON.stringify(userData);
-                } catch (e) {
-                    debugDiv.innerHTML += '<br>❌ خطأ في تحليل بيانات المستخدم';
-                }
-            }
-        }
-
-        // فحص التخزين عند التحميل
+        // تعبئة تلقائية لحساب تجريبي
         document.addEventListener('DOMContentLoaded', function() {
-            testLocalStorage();
+            document.getElementById('email').value = 'ahmed@example.com';
         });
     </script>
 </body>
