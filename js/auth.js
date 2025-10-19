@@ -1,42 +1,96 @@
-// معالجة نماذج المصادقة
+cat > ~/social-network/js/auth.js << 'EOF'
+// معالجة نماذج المصادقة مع قاعدة البيانات
+
+// تسجيل الدخول
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
+        
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        
         if (email && password) {
             showLoading('جاري تسجيل الدخول...');
-            setTimeout(() => {
-                hideLoading();
+            
+            const result = await loginUser(email, password);
+            
+            hideLoading();
+            
+            if (result.success) {
+                setSession(result.user);
                 alert('تم تسجيل الدخول بنجاح!');
                 window.location.href = 'home.html';
-            }, 2000);
+            } else {
+                alert(result.error);
+            }
         } else {
             alert('يرجى ملء جميع الحقول');
         }
     });
 }
 
+// إنشاء حساب
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
-    registerForm.addEventListener('submit', function(e) {
+    registerForm.addEventListener('submit', async function(e) {
         e.preventDefault();
+        
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        // التحقق من كلمات المرور
         if (password !== confirmPassword) {
             alert('كلمات المرور غير متطابقة');
             return;
         }
+        
+        // التحقق من صحة البريد الإلكتروني
+        if (!validateEmail(email)) {
+            alert('يرجى إدخال بريد إلكتروني صحيح');
+            return;
+        }
+        
         showLoading('جاري إنشاء الحساب...');
-        setTimeout(() => {
+        
+        // التحقق من وجود المستخدم مسبقاً
+        const userExists = await checkUserExists(email);
+        if (userExists.exists) {
             hideLoading();
+            alert('هذا البريد الإلكتروني مسجل مسبقاً');
+            return;
+        }
+        
+        // بيانات المستخدم
+        const userData = {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            username: username,
+            password: password, // في التطبيق الحقيقي، يجب تشفير كلمة المرور
+            created_at: new Date().toISOString()
+        };
+        
+        // تسجيل المستخدم في قاعدة البيانات
+        const result = await registerUser(userData);
+        
+        hideLoading();
+        
+        if (result.success) {
+            setSession(userData);
             alert('تم إنشاء الحساب بنجاح!');
             window.location.href = 'home.html';
-        }, 2000);
+        } else {
+            alert('حدث خطأ أثناء إنشاء الحساب: ' + result.error);
+        }
     });
 }
 
+// وظائف المساعدة
 function showLoading(message = 'جاري التحميل...') {
     const loading = document.createElement('div');
     loading.id = 'loading';
@@ -51,3 +105,11 @@ function showLoading(message = 'جاري التحميل...') {
 function hideLoading() {
     const loading = document.getElementById('loading');
     if (loading) loading.remove();
+}
+
+// التحقق من صحة البريد الإلكتروني
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+EOF
